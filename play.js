@@ -12,7 +12,14 @@ const ui = {
     lookCommand: document.getElementById('look-command'),
     takeCommand: document.getElementById('take-command'),
     useCommand: document.getElementById('use-command'),
+    //Temporary
+    resetCommand: document.getElementById('reset-command'),
 };
+
+//Temporary reset button to wipe save progress
+ui.resetCommand.addEventListener('click', function() {
+    updateScreen(newGame());
+});
 
 //Function for recieving input from the user
 function recievedInput(event) {

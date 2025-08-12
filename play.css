@@ -250,6 +250,21 @@ body {
 	flex-direction: row;
 }
 
+#setting-container {
+	background-color: powderblue;
+	height: 20px;
+	display: flex;
+	flex-direction: row;
+}
+
+#version-tracker {
+	font-size: 15px;
+	flex-grow: 1;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
+}
+
 .clickable {
 	font-style: italic;
 }
