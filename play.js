@@ -1,5 +1,10 @@
 'use strict';
 
+//Keep track of the user's command and target (and secondary target) for userInput
+let userCommand = "";
+let userTarget = "";
+let userTarget2 = "";
+
 /* BUILD UI */
 
 const ui = {
@@ -24,27 +29,48 @@ ui.resetCommand.addEventListener('click', function() {
 //Function for recieving input from the user
 function recievedInput(event) {
     if (event.target.id == 'enter-button' || event.key == 'Enter') {
-        console.log('I got input:' + ui.userInput.value);
+        // console.log('I got input:' + ui.userInput.value);
         makeMove(ui.userInput.value);
-        //After reading the input, resets the input field.
+        //After reading the input, resets the input field and the stored command/target.
         ui.userInput.value = '';
+        userCommand = '';
+        userTarget = '';
+        userTarget2 = '';
+    }
+}
+
+//Function to format the user's command and target into nice looking text.
+function formatUserInput() {
+    // console.log(`Formating based on command:${userCommand}, target:${userTarget}, target2:${userTarget2}`);
+    switch (userCommand) {
+        case 'look':
+            ui.userInput.value = 'look at ' + userTarget;
+            break;
+        case 'take':
+            ui.userInput.value = 'take the ' + userTarget;
+            break;
+        case 'use':
+            //might have two targets or only one
+            if (userTarget2 === '') {
+                //only 1
+                ui.userInput.value = 'use the ' + userTarget;
+            } else {
+                //has two
+                ui.userInput.value = 'use the ' + userTarget + ' on ' + userTarget2;
+            }
+            break;
+        default:
+            ui.userInput.value = userTarget;
     }
 }
 
 //Function for adding the commands to the user input on click
 function addCommand(event) {
-    let text = event.target.id.substring(0, event.target.id.indexOf('-'));
-    switch (text) {
-        case 'look':
-            (ui.userInput.value.includes('look at ')) ? ui.userInput.value = ui.userInput.value.replace('look at ', '') : ui.userInput.value = 'look at ' + ui.userInput.value
-            break;
-        case 'take':
-            (ui.userInput.value.includes('take the ')) ? ui.userInput.value = ui.userInput.value.replace('take the ', '') : ui.userInput.value = 'take the ' + ui.userInput.value
-            break;
-        case 'use':
-            (ui.userInput.value.includes('use the ')) ? ui.userInput.value = ui.userInput.value.replace('use the ', '') : ui.userInput.value = 'use the ' + ui.userInput.value
-            break;
+    userCommand = event.target.id.substring(0, event.target.id.indexOf('-'));
+    if (!(userCommand === 'use')) {
+        userTarget2 = '';
     }
+    formatUserInput();
 }
 
 //Add listeners for clicking the command buttons.
@@ -72,7 +98,7 @@ if (ui.userInput) {
 //function for updating the visuals of the screen to reflect the new game state
 function updateScreen(gameState) {
     console.log(gameState);
-    console.log(ui);
+    //console.log(ui);
     //Update the room-header to be the name of the current room
     ui.roomHeader.innerHTML = gameState['currentPlayerLocation'];
 
@@ -98,8 +124,22 @@ function updateScreen(gameState) {
     const clickableElements = document.querySelectorAll('.clickable');
     clickableElements.forEach((element) => {
         element.addEventListener('click', function () {
-            //We want to add the word clicked to the user input field
-            (ui.userInput.value.includes(this.textContent)) ? ui.userInput.value = ui.userInput.value.replace(this.textContent, '') : ui.userInput.value += this.textContent
+            //We want to add the word clicked to the user's target and their target2 if the use command is being used.
+            if (userCommand === 'use') {
+                //if userTarget is blank then put the text there, otherwise...
+                //if userTarget2 is blank then put the clicked on text there, otherwise cycle down.
+                if (userTarget === '') {
+                    userTarget = this.textContent;
+                } else if (userTarget2 === '') {
+                    userTarget2 = this.textContent;
+                } else {
+                    userTarget = userTarget2;
+                    userTarget2 = this.textContent;
+                }
+            } else {
+                userTarget = this.textContent;
+            }
+            formatUserInput();
         });
         element.addEventListener('mouseenter', function () {
             //Then we want them to visually look different when moused over
@@ -138,7 +178,7 @@ function updateList(listHTML, listArray) {
     let finalText = '';
     if (!Array.isArray(listArray)) {
         //it isn't a list, so make it one
-        console.log(listHTML, listArray);
+        //console.log(listHTML, listArray);
         convertedList = Object.keys(listArray);
     }
     //Sort the items in the list because why not
