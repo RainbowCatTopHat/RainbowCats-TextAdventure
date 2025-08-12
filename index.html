@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Text Adventure</title>
+	<link rel="stylesheet" href="play.css" />
+	<script defer src="play.js"></script>
+	<script defer src="data.js"></script>
+	<script defer src="game.js"></script>
+	<script defer src="client.js"></script>
+</head>
+
+<body>
+	<div id="game-container">
+		<div id="log-container">
+			<div id="log-border">
+				<div id="log"></div>
+			</div>
+			<div id="input-container">
+				<input id="user-input" spellcheck="false">
+				<button id="enter-button">Enter</button>
+			</div>
+		</div>
+		<div id="word-container">
+			<div id="column-container">
+				<div id="room-column">
+					<div id="room-header">Room Name</div>
+					<div id="room-list"></div>
+				</div>
+				<div id="inventory-column">
+					<div id="inventory-header">Inventory</div>
+					<div id="inventory-list"></div>
+				</div>
+				<div id="atlas-column">
+					<div id="atlas-header">Room Atlas</div>
+					<div id="atlas-list"></div>
+				</div>
+			</div>
+			<div id="command-container">
+				<button id="look-command" class="command">look</button>
+				<button id="take-command" class="command">take</button>
+				<button id="use-command" class="command">use</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
