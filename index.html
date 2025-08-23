@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="play.css" />
 	<script defer src="play.js"></script>
 	<script defer src="data.js"></script>
+	<script defer src="objects.js"></script>
 	<script defer src="game.js"></script>
 	<script defer src="client.js"></script>
 </head>
@@ -14,6 +15,7 @@
 <body>
 	<div id="game-container">
 		<div id="log-container">
+			<div id="current-location-tracker">Current location: </div>
 			<div id="log-border">
 				<div id="log"></div>
 			</div>
@@ -25,7 +27,7 @@
 		<div id="word-container">
 			<div id="column-container">
 				<div id="room-column">
-					<div id="room-header">Room Name</div>
+					<div id="room-header">Room Index</div>
 					<div id="room-list"></div>
 				</div>
 				<div id="inventory-column">
@@ -41,9 +43,11 @@
 				<button id="look-command" class="command">look</button>
 				<button id="take-command" class="command">take</button>
 				<button id="use-command" class="command">use</button>
+				<button id="cipher-command" class="command">cipher</button>
+				<button id="travel-command" class="command">travel</button>
 			</div>
 			<div id="setting-container">
-				<div id="version-tracker">v0.0-2: The better user input update!</div>
+				<div id="version-tracker">v0.1.0: The working (partially) tutorial update!</div>
 				<button id="reset-command">Delete My Save</button>
 			</div>
 		</div>

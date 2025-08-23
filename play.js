@@ -17,6 +17,9 @@ const ui = {
     lookCommand: document.getElementById('look-command'),
     takeCommand: document.getElementById('take-command'),
     useCommand: document.getElementById('use-command'),
+    cipherCommand: document.getElementById('cipher-command'),
+    travelCommand: document.getElementById('travel-command'),
+    currentLocationTracker: document.getElementById('current-location-tracker'),
     //Temporary
     resetCommand: document.getElementById('reset-command'),
 };
@@ -29,7 +32,7 @@ ui.resetCommand.addEventListener('click', function() {
 //Function for recieving input from the user
 function recievedInput(event) {
     if (event.target.id == 'enter-button' || event.key == 'Enter') {
-        // console.log('I got input:' + ui.userInput.value);
+        console.log(`Recieved move: '${ui.userInput.value}'`);
         makeMove(ui.userInput.value);
         //After reading the input, resets the input field and the stored command/target.
         ui.userInput.value = '';
@@ -48,6 +51,12 @@ function formatUserInput() {
             break;
         case 'take':
             ui.userInput.value = 'take the ' + userTarget;
+            break;
+        case 'cipher':
+            ui.userInput.value = 'cipher: ' + userTarget;
+            break;
+        case 'travel':
+            ui.userInput.value = 'travel to ' + userTarget;
             break;
         case 'use':
             //might have two targets or only one
@@ -86,6 +95,14 @@ if (ui.useCommand) {
     ui.useCommand.addEventListener('click', addCommand);
 }
 
+if (ui.cipherCommand) {
+    ui.cipherCommand.addEventListener('click', addCommand);
+}
+
+if (ui.travelCommand) {
+    ui.travelCommand.addEventListener('click', addCommand);
+}
+
 //Add listeners for clicking the enter button and entering text.
 if (ui.enterButton) {
     ui.enterButton.addEventListener('click', recievedInput);
@@ -100,7 +117,7 @@ function updateScreen(gameState) {
     console.log(gameState);
     //console.log(ui);
     //Update the room-header to be the name of the current room
-    ui.roomHeader.innerHTML = gameState['currentPlayerLocation'];
+    ui.currentLocationTracker.innerHTML = "Current location: " + gameState['currentPlayerLocation'];
 
     //Update the room, inventory, and atlas lists with current information
     //roomList wants the impression list for the current room the player is in
