@@ -5,11 +5,10 @@ let globalGameData = {};
 
 //New save file information
 const gameTemplate = {
-    //Where the player starts the game in
+    // Current room the player is in
     currentPlayerLocation: 'tutorial room',
-    //The world, a dictonary containing all the rooms, which are dictionaries containing all their objects,
-    //which themselves are dictonaries containing all their properties such as locked/unlocked.
-    //this is the core of the game.
+    
+    // Current rooms we have been in and all of the objects that could be encountered and their current location (inside a room).
     world: {
         'tutorial room': ['archway', 'paper key', 'pedestal', 'tutorial exit'],
         'tutorial hallway': ['archway', 'paper door'],
@@ -93,12 +92,22 @@ function parseTarget(game, move) {
 //Function to add an entry of text to the log
 function newLog(game, target, entry, entryName) {
     let text = '';
+    // Get rid of advance text messages if they are old information (chaining of text)
+    if (game.log[game.log.length - 1] === data.miscellaneous.advanceText) {
+        game.log.pop();
+    }
     //Find the right entry of text
     text = data[entry][entryName];
     //enhance the text with html elements
     text = enhanceText(text, game, target);
     //update the log
     game.log.push(text);
+    
+    // Limit size of log to max
+    const MAX_LOG_SIZE = 100;
+    if (game.log.length > MAX_LOG_SIZE) {
+        game.log.splice(0, game.log.length - MAX_LOG_SIZE);
+    }
 }
 
 //Function to make checking the properties of objects slightly easier (by combining checking it has the property with checking it)
