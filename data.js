@@ -8,19 +8,19 @@ const data = {
     //miscellaneous text
     miscellaneous: {
         //Intro text for the start of the game
-        welcomeMessage: '[Welcome to a text based adventure created by RainbowCatTopHat. I hope you enjoy my game!]',
+        welcomeMessage: '[Welcome to a text based adventure created by RainbowCatTopHat. I hope you enjoy my game!][chain]miscellaneous.intro_0[/chain]',
 
-        intro_0: 'In an alternate reality called the Waking Dream there exists an object known as the Dream Star. Which is said to grant any single wish to whomever manages to find it. In order to determine that only someone worthy may make a wish the Waking Dream is full of far too many wacky puzzles and challenges...',
+        intro_0: 'In an alternate reality called the Waking Dream there exists an object known as the Dream Star. Which is said to grant any single wish to whomever manages to find it. In order to determine that only someone worthy may make a wish the Waking Dream is full of far too many wacky puzzles and challenges...[chain]miscellaneous.intro_1[/chain]',
 
-        intro_1: "Or so you've heard.  But, with how fantastical the legend is —and frankly how many conflicting versions of the story exist— you had long ago dismissed it as just a fairytale.",
+        intro_1: "Or so you've heard.  But, with how fantastical the legend is —and frankly how many conflicting versions of the story exist— you had long ago dismissed it as just a fairytale.[chain]miscellaneous.intro_2[/chain]",
 
-        intro_2: 'That is until one night while walking alone you came across a pale white door shimmering in a rainbow colored sheen. The clearly magical door was blocking the trail, directly in your path.',
+        intro_2: 'That is until one night while walking alone you came across a pale white door shimmering in a rainbow colored sheen. The clearly magical door was blocking the trail, directly in your path.[chain]miscellaneous.intro_3[/chain]',
 
-        intro_3: 'You were still reasonably skeptical. Could this mysterious door really be related to that old legend, was it really possible to earn a wish? Yet you only hesitated for a second before you opened the door and stepped inside. After all, who would give up the opportunity to make their wish come true?',
+        intro_3: 'You were still reasonably skeptical. Could this mysterious door really be related to that old legend, was it really possible to earn a wish? Yet you only hesitated for a second before you opened the door and stepped inside. After all, who would give up the opportunity to make their wish come true?[chain]miscellaneous.tutorialStart[/chain]',
         
         //All the tutorial text
         //Message for when the tutorial starts.
-        tutorialStart: 'After entering the mysterious door you fall for what seems like forever, over 100 billion picoseconds. Your fall is stopped abruptly when you land on your face. The ground is polished cold stone. Just where have you ended up?',
+        tutorialStart: 'After entering the mysterious door you fall for what seems like forever, over 100 billion picoseconds. Your fall is stopped abruptly when you land on your face. The ground is polished cold stone. Just where have you ended up?[chain]miscellaneous.tutorial_0[/chain]',
         
         //When they start the game, before they've typed any commands
         tutorial_0: "[Welcome to the Waking Dream! In here the world works differently, you'll need to type \
@@ -73,7 +73,7 @@ const data = {
 
     //First zone the tutorial
     'tutorial room': {
-        look: 'Glancing around you find yourself in a nearly featureless white room. The walls, floor, and celing are made of smooth polished marble. In the center of the room sits a marble pedestal. Behind it is a marble archway that appears to lead to another room. On the wall to the left of the one with the archway is the tutorial exit door, unexpectedly not made of marble but quartz instead.',
+        look: 'Glancing around you find yourself in a nearly featureless white room. The walls, floor, and celing are made of smooth polished marble. In the center of the room sits a marble pedestal. Behind it is a marble archway that appears to lead to another room. On the wall to the left of the one with the archway is the tutorial exit door, unexpectedly not made of marble but quartz instead.[chain]miscellaneous.tutorial_1[/chain]',
         travel: 'You hop, skip, and jump over to the tutorial room.',
     },
 

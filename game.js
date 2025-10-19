@@ -19,12 +19,12 @@ const gameTemplate = {
     //The player's inventory, which starts empty.
     inventory: [],
     //The log
-    log:[data.miscellaneous.welcomeMessage, data.miscellaneous.advanceText],
+    log:[],
     //All of the data for the objects inside the game
     objects: structuredClone(startingObjects),
     //Storage for flags in the game to keep track of what the player has done outside of objects.
     flags: {
-        gameState: 'welcome',
+        nextChain: 'miscellaneous.intro_0',
         hiddenElements: [true, true, true, true, true, true],
         tutorialPopupsSeen: [false, false, false, false, false, false, false, false, false, false, false, false],
     }
@@ -363,6 +363,21 @@ function enhanceText(text, game, target = undefined) {
             enhancedText = beforeText + "<span class='clickable'>" + middleText + "</span>" + afterText;
         }
     }
+    //chain tag, for chaining messages together
+    if (enhancedText.indexOf('[chain]') > 0) {
+        while(enhancedText.indexOf('[chain]') > 0) {
+            //We have a message to chain!
+            //Tag should look like this: [chain]miscellaneous.intro_0[/chain]
+            let messageLoc = '';
+            //Isolate the message location
+            messageLoc = enhancedText.substring(enhancedText.indexOf('[chain]') + 7, enhancedText.indexOf('[/chain]'));
+            //Copy the location of the chained message to the game data
+            game.flags.nextChain = messageLoc;
+            //Delete the entire chain tag, so the player never sees it.
+            let tempText = enhancedText.substring(0, enhancedText.indexOf('[chain]')) + enhancedText.substring(enhancedText.indexOf('[/chain]') + 8);
+            enhancedText = tempText;
+        }
+    }
     //Add future tags here
     //Before we end, update the impressions based on impressionUpdate.
     game.impressions[game.currentPlayerLocation] = [...new Set([...game.impressions[game.currentPlayerLocation], ...impressionUpdate])]
@@ -370,55 +385,12 @@ function enhanceText(text, game, target = undefined) {
     return enhancedText;
 }
 
-//Function to update the game based on the current gameState
-function parseGameState(game, command) {
-    switch (game.flags.gameState) {
-        case 'welcome':
-            //It's the very start of a new save file, update the game state and return the next messages.
-            game.flags.gameState = 'intro0';
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'intro_0')
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'advanceText')
-            //Then make the command null to return nothing
-            return '';
-        case 'intro0':
-            //It's the very start of a new save file, update the game state and return the next messages.
-            game.flags.gameState = 'intro1';
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'intro_1')
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'advanceText')
-            //Then make the command null to return nothing
-            return '';
-        case 'intro1':
-            //It's the very start of a new save file, update the game state and return the next messages.
-            game.flags.gameState = 'intro2';
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'intro_2')
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'advanceText')
-            //Then make the command null to return nothing
-            return '';
-        case 'intro2':
-            //It's the very start of a new save file, update the game state and return the next messages.
-            game.flags.gameState = 'intro3';
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'intro_3')
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'advanceText')
-            //Then make the command null to return nothing
-            return '';
-        case 'intro3':
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'tutorialStart')
-            newLog(game, "(if you see this, that's an error)", 'miscellaneous', 'tutorial_0')
-            game.flags.tutorialPopupsSeen[0] = true;
-        case 'tutorial':
-            //It's the start of the tutorial/the tutorial
-            game.flags.gameState = 'tutorial';
-            return command;
-        default:
-            console.log(`Error: unknown gamestate: ${game.flags.gameState}`);
-            return command;
-    }
-}
-
 //Copy the game template to the new game
 function startGame() {
     console.log(`START GAME`);
     globalGameData = structuredClone(gameTemplate);
+    newLog(globalGameData, '', 'miscellaneous', 'welcomeMessage');
+    newLog(globalGameData, '', 'miscellaneous', 'advanceText');
     console.log(globalGameData);
     return globalGameData;
 }
@@ -447,8 +419,16 @@ function parseAction(move) {
     } else {
         target = parseTarget(globalGameData, move);
     }
-    //Check the gameState altering behavior as necessary.
-    command = parseGameState(globalGameData, command);
+    //Check for chained message flag
+    if (Object.keys(globalGameData.flags).includes('nextChain')) {
+        //we need to chain a message, also don't let the player do anything unless it's a dev command
+        if (!(command === 'dev')) {
+            command = '';
+        }
+        let chainLocation = globalGameData.flags.nextChain;
+        delete globalGameData.flags.nextChain;
+        newLog(globalGameData, target, chainLocation.substring(0, chainLocation.indexOf('.')), chainLocation.substring(chainLocation.indexOf('.') + 1));
+    }
     //Depending on the command, run different parse functions
     switch (command) {
         case 'look':
@@ -477,6 +457,11 @@ function parseAction(move) {
         default:
         //Not sure what the user is doing, send them an error!
         newLog(globalGameData, target, 'miscellaneous', 'invalidCommand');
+    }
+    
+    //Did we send a message that chains? If so, then add advanceText to the log
+    if (Object.keys(globalGameData.flags).includes('nextChain')) {
+        newLog(globalGameData, target, 'miscellaneous', 'advanceText');
     }
     
     // Return updated game information
